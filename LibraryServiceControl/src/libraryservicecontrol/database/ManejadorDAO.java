@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public abstract class ManejadorDAO<T> {
 	
@@ -69,5 +70,11 @@ public abstract class ManejadorDAO<T> {
 	 * @return
 	 */
 	public abstract T buscarPorId(Integer id);
+	
+	/**
+	 * Realiza una busqueda de todos los objetos en una tabla
+	 * @return
+	 */
+	public abstract List<T> buscarTodos();
 
 }

@@ -4,42 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import libraryservicecontrol.model.Usuario;
 
 
-public class UsuarioDAO extends ManejadorDAO<Usuario>{
-
-	@Override
-	public Usuario buscarPorId(Integer id) {
-		
-		StringBuilder sql 	= new StringBuilder("SELECT * FROM usuario WHERE id = ").append(id);
-		ResultSet resultado = null;
-		Usuario usuario 	= null;
-		resultado 			= consultar(sql.toString());
-		
-		try {
-			if(resultado != null && resultado.next() ){
-				usuario = new Usuario();
-				usuario.setId(resultado.getInt("id"));
-				usuario.setNombres(resultado.getString("nombres"));
-				usuario.setApellidos(resultado.getString("apellidos"));
-				usuario.setUsuario(resultado.getString("usuario"));
-				usuario.setClave(resultado.getString("clave"));
-				usuario.setFechaCreado(resultado.getDate("fecha_creado"));
-				usuario.setTipoDocumento(resultado.getString("tipo_documento"));
-				usuario.setTelefono(resultado.getString("telefono"));
-				usuario.setCorreo(resultado.getString("correo"));
-				usuario.setDireccion(resultado.getString("direccion"));
-				usuario.setCiudad(resultado.getString("ciudad"));
-				usuario.setRolId(resultado.getInt("rol_id"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return usuario;
-	}
+public class UsuarioDAO extends ManejadorDAO<Usuario>{	
 	
 	public Boolean crearUsuario(Usuario usuario){
 		
@@ -121,6 +92,110 @@ public class UsuarioDAO extends ManejadorDAO<Usuario>{
 		}
 		
 		return isActualizado;
+	}	
+
+	public Usuario validarUsuario(String usuario, String clave) {
+		
+		StringBuilder sql 	= new StringBuilder("SELECT * FROM usuario WHERE usuario=? AND clave=? ");
+		Connection conexion	= Conexion.getConexion();
+		PreparedStatement consulta	 = null;
+		Usuario u		 	= null;
+		ResultSet resultado = null;
+		
+		try {
+			consulta 		= conexion.prepareStatement(sql.toString());
+			consulta.setString(1, usuario);
+			consulta.setString(2, clave);
+			resultado		= consulta.executeQuery();
+			
+			if(resultado != null && resultado.next() ){
+				u= new Usuario();
+				u.setId(resultado.getInt("id"));
+				u.setNombres(resultado.getString("nombres"));
+				u.setApellidos(resultado.getString("apellidos"));
+				u.setUsuario(resultado.getString("usuario"));
+				u.setClave(resultado.getString("clave"));
+				u.setFechaCreado(resultado.getDate("fecha_creado"));
+				u.setFechaNacimiento(resultado.getDate("fecha_nacimiento"));
+				u.setTipoDocumento(resultado.getString("tipo_documento"));
+				u.setTelefono(resultado.getString("telefono"));
+				u.setCorreo(resultado.getString("correo"));
+				u.setDireccion(resultado.getString("direccion"));
+				u.setCiudad(resultado.getString("ciudad"));
+				u.setRolId(resultado.getInt("rol_id"));
+			}
+			
+			Conexion.cerrarConexion(conexion);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return u;
+	}
+	
+	@Override
+	public Usuario buscarPorId(Integer id) {
+		
+		StringBuilder sql 	= new StringBuilder("SELECT * FROM usuario WHERE id = ").append(id);
+		ResultSet resultado = null;
+		Usuario usuario 	= null;
+		resultado 			= consultar(sql.toString());
+		
+		try {
+			if(resultado != null && resultado.next() ){
+				usuario = new Usuario();
+				usuario.setId(resultado.getInt("id"));
+				usuario.setNombres(resultado.getString("nombres"));
+				usuario.setApellidos(resultado.getString("apellidos"));
+				usuario.setUsuario(resultado.getString("usuario"));
+				usuario.setClave(resultado.getString("clave"));
+				usuario.setFechaCreado(resultado.getDate("fecha_creado"));
+				usuario.setFechaNacimiento(resultado.getDate("fecha_nacimiento"));
+				usuario.setTipoDocumento(resultado.getString("tipo_documento"));
+				usuario.setTelefono(resultado.getString("telefono"));
+				usuario.setCorreo(resultado.getString("correo"));
+				usuario.setDireccion(resultado.getString("direccion"));
+				usuario.setCiudad(resultado.getString("ciudad"));
+				usuario.setRolId(resultado.getInt("rol_id"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return usuario;
+	}
+
+	@Override
+	public List<Usuario> buscarTodos() {
+		
+		StringBuilder sql 		= new StringBuilder("SELECT * FROM usuario ");
+		ResultSet resultado 	= null;
+		List<Usuario> usuarios	= new ArrayList<Usuario>();
+		resultado 				= consultar(sql.toString());
+		
+		try {
+			while(resultado != null && resultado.next() ){
+				Usuario usuario = new Usuario();
+				usuario.setId(resultado.getInt("id"));
+				usuario.setNombres(resultado.getString("nombres"));
+				usuario.setApellidos(resultado.getString("apellidos"));
+				usuario.setUsuario(resultado.getString("usuario"));
+				usuario.setClave(resultado.getString("clave"));
+				usuario.setFechaCreado(resultado.getDate("fecha_creado"));
+				usuario.setFechaNacimiento(resultado.getDate("fecha_nacimiento"));
+				usuario.setTipoDocumento(resultado.getString("tipo_documento"));
+				usuario.setTelefono(resultado.getString("telefono"));
+				usuario.setCorreo(resultado.getString("correo"));
+				usuario.setDireccion(resultado.getString("direccion"));
+				usuario.setCiudad(resultado.getString("ciudad"));
+				usuario.setRolId(resultado.getInt("rol_id"));
+				usuarios.add(usuario);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return usuarios;
 	}
 	
 }
