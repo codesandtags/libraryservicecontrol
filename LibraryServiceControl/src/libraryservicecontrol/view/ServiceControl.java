@@ -8,12 +8,18 @@ import libraryservicecontrol.database.CategoriaDAO;
 import libraryservicecontrol.database.ElementoDAO;
 import libraryservicecontrol.database.UsuarioDAO;
 import libraryservicecontrol.model.Categoria;
+import libraryservicecontrol.model.Elemento;
+import libraryservicecontrol.model.HistoricoPrestamo;
 import libraryservicecontrol.model.Usuario;
+import libraryservicecontrol.model.VistaTablaElemento;
 import libraryservicecontrol.model.VistaTablaUsuario;
 
 public class ServiceControl extends javax.swing.JFrame {
 
     private Usuario usuario;
+    private Usuario  usuarioConsultado;
+    private List<Elemento> elementosConsultados;
+    private List<HistoricoPrestamo> historicoUsuarioConsultado;
     private UsuarioDAO usuarioDao;
     private ElementoDAO elementoDao;
     private CategoriaDAO categoriaDao;
@@ -183,6 +189,11 @@ public class ServiceControl extends javax.swing.JFrame {
         lblNombre.setText("Nombre");
 
         btnConsultarDisponibilidad.setText("Consultar");
+        btnConsultarDisponibilidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarDisponibilidadActionPerformed(evt);
+            }
+        });
 
         tblDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -204,7 +215,7 @@ public class ServiceControl extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addContainerGap(524, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -214,9 +225,7 @@ public class ServiceControl extends javax.swing.JFrame {
                         .addComponent(lblSalir)
                         .addGap(14, 14, 14))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane3)
-                            .addComponent(btnVolver1))
+                        .addComponent(btnVolver1)
                         .addGap(34, 34, 34))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,46 +233,47 @@ public class ServiceControl extends javax.swing.JFrame {
                         .addGap(71, 71, 71)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
+                        .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnRegistrarUsuario)
-                                .addGap(278, 278, 278))
                             .addComponent(jScrollPane1)
                             .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(lblDisponibilidad))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(selTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(27, 27, 27)
-                                        .addComponent(jLabel3)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(lblConsultar)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblHistoricoPrestamos)
-                                        .addGap(47, 47, 47)
-                                        .addComponent(lblHistoricoPrestamosNoResultados))
-                                    .addComponent(lblDisponibilidad)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblCategoria)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(selCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(31, 31, 31)
-                                        .addComponent(lblCodigo)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnConsultarDisponibilidad)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(lblNombre)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addGap(0, 4, Short.MAX_VALUE)))))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(btnRegistrarUsuario)
+                                        .addGap(278, 278, 278))
+                                    .addComponent(btnConsultarDisponibilidad, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel2)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(selTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(27, 27, 27)
+                                            .addComponent(jLabel3)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(lblConsultar)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblHistoricoPrestamos)
+                                            .addGap(47, 47, 47)
+                                            .addComponent(lblHistoricoPrestamosNoResultados))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblCategoria)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(selCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(31, 31, 31)
+                                            .addComponent(lblCodigo)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(lblNombre)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
                 .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
@@ -304,17 +314,16 @@ public class ServiceControl extends javax.swing.JFrame {
                             .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblNombre)
                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnConsultarDisponibilidad)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                        .addComponent(btnVolver1)
-                        .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnConsultarDisponibilidad))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(lblHistoricoPrestamosNoResultados)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(lblHistoricoPrestamosNoResultados)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(btnVolver1)
+                .addContainerGap())
         );
 
         pack();
@@ -322,6 +331,8 @@ public class ServiceControl extends javax.swing.JFrame {
 
     private void lblSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSalirMouseClicked
         JOptionPane.showMessageDialog(this, "Acaba de cerrar sesión");
+        Login login = new Login();
+        login.setVisible(true);
         dispose();
     }//GEN-LAST:event_lblSalirMouseClicked
 
@@ -337,19 +348,20 @@ public class ServiceControl extends javax.swing.JFrame {
         
         if(txtDocumento.getText().isEmpty()){
             JOptionPane.showMessageDialog(this, "Por favor ingrese un numero de documento");
+            return ;
         }
         
         String tipoDocumento = (String)selTipoDocumento.getSelectedItem();
         String documento = txtDocumento.getText();
-        Usuario usuario = usuarioDao.buscarPorDocumento(tipoDocumento, documento);
+        usuarioConsultado = usuarioDao.buscarPorDocumento(tipoDocumento, documento);
         
-        if(usuario == null){
+        if(usuarioConsultado == null){
             JOptionPane.showMessageDialog(this, "No se encontraron registros");
             btnRegistrarUsuario.setVisible(true);
             tblUsuario.setVisible(false);
         }else{
             List<Usuario> usuarios = new ArrayList<Usuario>();
-            usuarios.add(usuario);
+            usuarios.add(usuarioConsultado);
             VistaTablaUsuario vista = new VistaTablaUsuario(usuarios);
             tblUsuario.setModel(vista);
             btnRegistrarUsuario.setVisible(false);
@@ -372,6 +384,26 @@ public class ServiceControl extends javax.swing.JFrame {
         userRegister.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnRegistrarUsuarioActionPerformed
+
+    private void btnConsultarDisponibilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarDisponibilidadActionPerformed
+        
+        String categoria = (String) selCategoria.getSelectedItem();
+        String codigo = txtCodigo.getText();
+        String nombre = txtNombre.getText();
+        
+        elementosConsultados = elementoDao
+                        .buscarPorCategoriaCodigoNombre(categoria, codigo, nombre);
+        
+        if(elementosConsultados.size() > 0){
+            VistaTablaElemento vista = new VistaTablaElemento(elementosConsultados);
+            tblDisponibles.setModel(vista);
+            tblDisponibles.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "No se encontraron elementos disponibles");
+            tblDisponibles.setVisible(false);
+        }
+        
+    }//GEN-LAST:event_btnConsultarDisponibilidadActionPerformed
 
     /**
      * @param args the command line arguments

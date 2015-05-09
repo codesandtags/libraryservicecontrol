@@ -274,6 +274,8 @@ public class ElementRegister extends javax.swing.JFrame {
 
     private void lblSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSalirMouseClicked
         JOptionPane.showMessageDialog(this, "Acaba de cerrar sesión");
+        Login login = new Login();
+        login.setVisible(true);
         dispose();
     }//GEN-LAST:event_lblSalirMouseClicked
 
@@ -317,7 +319,7 @@ public class ElementRegister extends javax.swing.JFrame {
             elemento.setFechaPublicacion( new java.sql.Date(fechaPublicacion.getTime()));
         }catch(ParseException e){
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Por favor ingrese una fecha valida");
+            JOptionPane.showMessageDialog(this, "Por favor ingrese una fecha valida en formato AAAA-MM-DD");
             return ;
         }
         

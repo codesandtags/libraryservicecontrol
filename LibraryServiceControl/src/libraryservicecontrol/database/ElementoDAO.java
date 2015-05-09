@@ -8,8 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import libraryservicecontrol.model.Elemento;
+import libraryservicecontrol.model.Usuario;
 
 public class ElementoDAO extends ManejadorDAO<Elemento>{
+    
+    private CategoriaDAO categoriaDao;
 
     @Override
     public Elemento buscarPorId(Integer id) {
@@ -99,5 +102,67 @@ public class ElementoDAO extends ManejadorDAO<Elemento>{
         }
 
         return isCreado;
+    }
+    
+    
+    
+    public List<Elemento> buscarPorCategoriaCodigoNombre(String categoria, String codigo, String nombre){
+        StringBuilder sql 	= new StringBuilder("SELECT * FROM elemento WHERE 1=1 ");
+        Connection conexion	= Conexion.getConexion();
+        PreparedStatement consulta	 = null;
+        List<Elemento> elementos	= new ArrayList<Elemento>();
+        ResultSet resultado = null;
+        categoriaDao = new CategoriaDAO();
+        Integer categoriaId = null;
+        
+        if(categoria != null && !categoria.isEmpty()){
+            sql.append(" AND categoria_id=?");
+            categoriaId = categoriaDao.buscarPorCategoria(categoria).getId();
+        }
+        if(codigo != null && !codigo.isEmpty()){
+            sql.append(" AND id=?");
+        }
+        if(nombre != null && !nombre.isEmpty()){
+            sql.append(" AND titulo LIKE ?");
+        }
+
+        try {
+            consulta 		= conexion.prepareStatement(sql.toString());
+            consulta.setInt(1, categoriaId);
+            System.out.println(" => " + sql);
+            System.out.println("categoria => " + categoriaId);
+            System.out.println("nombre => " + nombre);
+            System.out.println("codigo => " + codigo);
+            
+            if(codigo != null && !codigo.isEmpty()){
+                consulta.setString(2, codigo);
+                if(nombre != null && !nombre.isEmpty()){
+                    consulta.setString(3,  "%" + nombre + "%");
+                }
+            }else if(nombre != null && !nombre.isEmpty()){
+                consulta.setString(2, "%" + nombre + "%");
+            }
+            
+            resultado = consulta.executeQuery();
+
+            while(resultado != null && resultado.next() ){
+                Elemento elemento = new Elemento();
+                elemento.setId(resultado.getInt("id"));
+                elemento.setTitulo(resultado.getString("titulo"));
+                elemento.setAutor(resultado.getString("autor"));
+                elemento.setEditorial(resultado.getString("editorial"));
+                elemento.setFechaPublicacion(resultado.getDate("fecha_publicacion"));
+                elemento.setObservaciones(resultado.getString("titulo"));
+                elemento.setCategoriaId(resultado.getInt("categoria_id"));
+                elemento.setAreaId(resultado.getInt("area_id"));
+                elemento.setGeneroId(resultado.getInt("genero_id"));
+                elementos.add(elemento);
+            }
+            Conexion.cerrarConexion(conexion);
+        } catch (SQLException e) {
+                e.printStackTrace();
+        }
+
+        return elementos;
     }
 }

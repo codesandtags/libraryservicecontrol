@@ -111,6 +111,8 @@ public class Admin extends javax.swing.JFrame {
 
     private void lblSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSalirMouseClicked
         JOptionPane.showMessageDialog(this, "Acaba de cerrar sesión");
+        Login login = new Login();
+        login.setVisible(true);
         dispose();
     }//GEN-LAST:event_lblSalirMouseClicked
 
