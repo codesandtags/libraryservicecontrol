@@ -95,7 +95,6 @@ public class UsuarioDAO extends ManejadorDAO<Usuario>{
     }	
 
     public Usuario validarUsuario(String usuario, String clave) {
-
         StringBuilder sql 	= new StringBuilder("SELECT * FROM usuario WHERE usuario=? AND clave=? ");
         Connection conexion	= Conexion.getConexion();
         PreparedStatement consulta	 = null;
@@ -194,6 +193,44 @@ public class UsuarioDAO extends ManejadorDAO<Usuario>{
         }
 
         return usuarios;
+    }
+    
+    public Usuario buscarPorDocumento(String tipoDocumento, String documento) {
+        StringBuilder sql 	= new StringBuilder("SELECT * FROM usuario WHERE tipo_documento=? AND numero_documento=? ");
+        Connection conexion	= Conexion.getConexion();
+        PreparedStatement consulta	 = null;
+        Usuario u		 	= null;
+        ResultSet resultado = null;
+
+        try {
+            consulta 		= conexion.prepareStatement(sql.toString());
+            consulta.setString(1, tipoDocumento);
+            consulta.setString(2, documento);
+            resultado		= consulta.executeQuery();
+
+            if(resultado != null && resultado.next() ){
+                u= new Usuario();
+                u.setId(resultado.getInt("id"));
+                u.setNombres(resultado.getString("nombres"));
+                u.setApellidos(resultado.getString("apellidos"));
+                u.setUsuario(resultado.getString("usuario"));
+                u.setClave(resultado.getString("clave"));
+                u.setFechaCreado(resultado.getDate("fecha_creado"));
+                u.setFechaNacimiento(resultado.getDate("fecha_nacimiento"));
+                u.setTipoDocumento(resultado.getString("tipo_documento"));
+                u.setTelefono(resultado.getString("telefono"));
+                u.setCorreo(resultado.getString("correo"));
+                u.setDireccion(resultado.getString("direccion"));
+                u.setCiudad(resultado.getString("ciudad"));
+                u.setRolId(resultado.getInt("rol_id"));
+            }
+
+            Conexion.cerrarConexion(conexion);
+        } catch (SQLException e) {
+                e.printStackTrace();
+        }
+
+        return u;
     }
 	
 }
