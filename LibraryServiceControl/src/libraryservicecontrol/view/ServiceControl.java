@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import libraryservicecontrol.database.CategoriaDAO;
 import libraryservicecontrol.database.ElementoDAO;
 import libraryservicecontrol.database.UsuarioDAO;
+import libraryservicecontrol.model.Categoria;
 import libraryservicecontrol.model.Usuario;
 import libraryservicecontrol.model.VistaTablaUsuario;
 
@@ -14,6 +16,7 @@ public class ServiceControl extends javax.swing.JFrame {
     private Usuario usuario;
     private UsuarioDAO usuarioDao;
     private ElementoDAO elementoDao;
+    private CategoriaDAO categoriaDao;
     
     /**
      * Creates new form Admin
@@ -31,14 +34,23 @@ public class ServiceControl extends javax.swing.JFrame {
         lblNombreUsuario.setText(usuario.getNombreCompleto());
         usuarioDao = new UsuarioDAO();
         elementoDao = new ElementoDAO();
+        categoriaDao = new CategoriaDAO();
         btnRegistrarUsuario.setVisible(false);
         tblUsuario.setVisible(false);
+        tblHistoricoPrestamos.setVisible(false);
+        tblDisponibles.setVisible(false);
         
         List<String> tiposDocumento = new ArrayList<String>();
         tiposDocumento.add("CEDULA");
         tiposDocumento.add("CEDULA EXTRANJERIA");
         tiposDocumento.add("TARJETA IDENTIDAD");
         selTipoDocumento.setModel(new DefaultComboBoxModel(tiposDocumento.toArray()));
+        
+        List<String> categorias = new ArrayList<String>();
+        for(Categoria categoria : categoriaDao.buscarTodos()){
+            categorias.add(categoria.getCategoria());
+        }
+        selCategoria.setModel(new DefaultComboBoxModel(categorias.toArray()));
     }
 
     /**
@@ -75,7 +87,8 @@ public class ServiceControl extends javax.swing.JFrame {
         txtNombre = new javax.swing.JTextField();
         btnConsultarDisponibilidad = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblUsuario1 = new javax.swing.JTable();
+        tblDisponibles = new javax.swing.JTable();
+        lblHistoricoPrestamosNoResultados = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -171,7 +184,7 @@ public class ServiceControl extends javax.swing.JFrame {
 
         btnConsultarDisponibilidad.setText("Consultar");
 
-        tblUsuario1.setModel(new javax.swing.table.DefaultTableModel(
+        tblDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -182,7 +195,9 @@ public class ServiceControl extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(tblUsuario1);
+        jScrollPane3.setViewportView(tblDisponibles);
+
+        lblHistoricoPrestamosNoResultados.setText("  ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -228,7 +243,10 @@ public class ServiceControl extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(lblConsultar)
-                                    .addComponent(lblHistoricoPrestamos)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblHistoricoPrestamos)
+                                        .addGap(47, 47, 47)
+                                        .addComponent(lblHistoricoPrestamosNoResultados))
                                     .addComponent(lblDisponibilidad)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblCategoria)
@@ -270,27 +288,33 @@ public class ServiceControl extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRegistrarUsuario)
-                .addGap(5, 5, 5)
-                .addComponent(lblHistoricoPrestamos)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblDisponibilidad)
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCategoria)
-                    .addComponent(selCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblCodigo)
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNombre)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnConsultarDisponibilidad)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(btnVolver1)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(lblHistoricoPrestamos)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(lblDisponibilidad)
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCategoria)
+                            .addComponent(selCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCodigo)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNombre)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnConsultarDisponibilidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addComponent(btnVolver1)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lblHistoricoPrestamosNoResultados)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -409,14 +433,15 @@ public class ServiceControl extends javax.swing.JFrame {
     private javax.swing.JLabel lblConsultar;
     private javax.swing.JLabel lblDisponibilidad;
     private javax.swing.JLabel lblHistoricoPrestamos;
+    private javax.swing.JLabel lblHistoricoPrestamosNoResultados;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblNombreUsuario;
     private javax.swing.JLabel lblSalir;
     private javax.swing.JComboBox selCategoria;
     private javax.swing.JComboBox selTipoDocumento;
+    private javax.swing.JTable tblDisponibles;
     private javax.swing.JTable tblHistoricoPrestamos;
     private javax.swing.JTable tblUsuario;
-    private javax.swing.JTable tblUsuario1;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDocumento;
     private javax.swing.JTextField txtNombre;
