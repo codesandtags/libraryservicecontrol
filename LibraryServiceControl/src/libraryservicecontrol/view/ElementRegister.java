@@ -1,13 +1,12 @@
 package libraryservicecontrol.view;
 
-import java.text.DateFormat;
+import java.util.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.text.DateFormatter;
 import libraryservicecontrol.database.AreaDAO;
 import libraryservicecontrol.database.CategoriaDAO;
 import libraryservicecontrol.database.ElementoDAO;
@@ -64,11 +63,6 @@ public class ElementRegister extends javax.swing.JFrame {
             generos.add(genero.getGenero());
         }
         selGenero.setModel(new DefaultComboBoxModel(generos.toArray()));
-        
-        DateFormat format = new SimpleDateFormat("dd-MMMM-yyyy");
-        DateFormatter df = new DateFormatter(format);
-        txtFechaPublicacion = new JFormattedTextField(df);
-        
     }
 
     /**
@@ -159,6 +153,11 @@ public class ElementRegister extends javax.swing.JFrame {
 
         btnCancelar.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnGuardar1.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         btnGuardar1.setText("Guardar");
@@ -287,11 +286,21 @@ public class ElementRegister extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolver1ActionPerformed
 
     private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
-        
+
         // Asignacion de combos
         Categoria categoria = categoriaDao.buscarPorCategoria((String)selCategoria.getSelectedItem());
         Area area = areaDao.buscarPorArea((String)selArea.getSelectedItem());
         Genero genero = generoDao.buscarPorGenero((String)selGenero.getSelectedItem());
+
+        if(   txtNombres.getText().isEmpty() 
+            || txtAutor.getText().isEmpty()
+            || txtEditorial.getText().isEmpty()
+            || txtObservaciones.getText().isEmpty()
+            || txtNombres.getText().isEmpty()
+           ){
+            JOptionPane.showMessageDialog(this, "Por favor diligencie todos los datos");
+            return ;
+        }
         
         Elemento elemento  = new Elemento();
         elemento.setTitulo(txtNombres.getText());
@@ -302,8 +311,41 @@ public class ElementRegister extends javax.swing.JFrame {
         elemento.setGeneroId(genero.getId());
         elemento.setCategoriaId(categoria.getId());
         
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaPublicacion = formatter.parse(txtFechaPublicacion.getText());
+            elemento.setFechaPublicacion( new java.sql.Date(fechaPublicacion.getTime()));
+        }catch(ParseException e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Por favor ingrese una fecha valida");
+            return ;
+        }
+        
+        if(elementoDao.crearElemento(elemento)){
+            JOptionPane.showMessageDialog(this, "Elemento creado exitosamente!");
+            limpiarCampos();
+        }else{
+            JOptionPane.showMessageDialog(this, "Ocurrio un error creando el elemento!");
+        }
+        
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void limpiarCampos(){
+        // Limpia los datos del formulario
+        txtNombres.setText("");
+        txtAutor.setText("");
+        txtEditorial.setText("");
+        txtObservaciones.setText("");
+        selArea.setSelectedIndex(0);
+        selCategoria.setSelectedIndex(0);
+        selGenero.setSelectedIndex(0);
+        txtFechaPublicacion.setText("");
+    }
+    
     /**
      * @param args the command line arguments
      */

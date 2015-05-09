@@ -1,5 +1,8 @@
 package libraryservicecontrol.database;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,5 +64,40 @@ public class ElementoDAO extends ManejadorDAO<Elemento>{
         }
 
         return elementos;
+    }
+    
+    public Boolean crearElemento(Elemento elemento){
+
+        Boolean isCreado    = false;
+        StringBuilder sql 	= new StringBuilder("INSERT INTO elemento ")
+        .append("(titulo, autor, editorial, fecha_publicacion, observaciones, categoria_id, area_id, genero_id) ")
+        .append("VALUES (?,?,?,?,?,?,?,?) ");
+
+        Connection conexion	 = Conexion.getConexion();
+        PreparedStatement consulta	 = null;
+        Integer insertados  = null;	
+
+        try {
+            consulta 		= conexion.prepareStatement(sql.toString());
+            consulta.setString(1, elemento.getTitulo());
+            consulta.setString(2, elemento.getAutor());
+            consulta.setString(3, elemento.getEditorial());
+            consulta.setDate(4, (Date) elemento.getFechaPublicacion());
+            consulta.setString(5, elemento.getObservaciones());
+            consulta.setInt(6, elemento.getCategoriaId());
+            consulta.setInt(7, elemento.getAreaId());
+            consulta.setInt(8, elemento.getGeneroId());
+            insertados = consulta.executeUpdate();
+
+            if(insertados  > 0){
+                isCreado = true;
+            }
+
+            Conexion.cerrarConexion(conexion);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return isCreado;
     }
 }
