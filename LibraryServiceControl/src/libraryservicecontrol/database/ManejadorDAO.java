@@ -14,17 +14,17 @@ public abstract class ManejadorDAO<T> {
 	 * @return {@link ResultSet} con el Resultado de la consulta
 	 */
 	public ResultSet consultar(String sql){
-		Connection conexion  = Conexion.getConexion();
-		Statement consulta 	 = null;
-		ResultSet resultado  = null;	
-		try {
-			consulta = conexion.createStatement();
-			resultado	= consulta.executeQuery(sql);
-			Conexion.cerrarConexion(conexion);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return resultado;
+            Connection conexion  = Conexion.getConexion();
+            Statement consulta 	 = null;
+            ResultSet resultado  = null;	
+            try {
+                    consulta = conexion.createStatement();
+                    resultado	= consulta.executeQuery(sql);
+                    //Conexion.cerrarConexion(conexion);
+            } catch (SQLException e) {
+                    e.printStackTrace();
+            }
+            return resultado;
 	}
 	
 	/**

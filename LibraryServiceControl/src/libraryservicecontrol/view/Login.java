@@ -1,20 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package libraryservicecontrol.view;
 
-import java.util.HashMap;
-import java.util.Hashtable;
 import javax.swing.JOptionPane;
 import libraryservicecontrol.database.UsuarioDAO;
 import libraryservicecontrol.model.Usuario;
 
-/**
- *
- * @author JuanGomez
- */
 public class Login extends javax.swing.JFrame {
 
     /**

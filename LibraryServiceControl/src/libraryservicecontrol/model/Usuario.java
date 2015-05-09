@@ -108,7 +108,7 @@ public class Usuario {
                 nombreCompleto += this.nombres;
             }
             if(this.apellidos != null){
-                nombreCompleto += this.apellidos;
+                nombreCompleto += " " + this.apellidos;
             }
             return nombreCompleto;
         }

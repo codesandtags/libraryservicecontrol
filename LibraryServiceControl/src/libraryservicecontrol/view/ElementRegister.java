@@ -1,20 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package libraryservicecontrol.view;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.text.DateFormatter;
+import libraryservicecontrol.database.AreaDAO;
+import libraryservicecontrol.database.CategoriaDAO;
+import libraryservicecontrol.database.ElementoDAO;
+import libraryservicecontrol.database.GeneroDAO;
+import libraryservicecontrol.model.Area;
+import libraryservicecontrol.model.Categoria;
+import libraryservicecontrol.model.Elemento;
+import libraryservicecontrol.model.Genero;
 import libraryservicecontrol.model.Usuario;
 
-/**
- *
- * @author JuanGomez
- */
 public class ElementRegister extends javax.swing.JFrame {
 
     private Usuario usuario;
+    private ElementoDAO elementoDao;
+    private CategoriaDAO categoriaDao;
+    private AreaDAO areaDao;
+    private GeneroDAO generoDao;
     
     /**
      * Creates new form Admin
@@ -30,6 +40,35 @@ public class ElementRegister extends javax.swing.JFrame {
         initComponents();
         this.usuario = usuario;
         lblNombreUsuario.setText(usuario.getNombreCompleto());
+        
+        // Carga de componentes en el formulario
+        elementoDao = new ElementoDAO();
+        categoriaDao = new CategoriaDAO();
+        areaDao = new AreaDAO();
+        generoDao = new GeneroDAO();
+        List<String> categorias = new ArrayList<String>();
+        List<String> areas      = new ArrayList<String>();
+        List<String> generos    = new ArrayList<String>();
+        
+        for(Categoria categoria : categoriaDao.buscarTodos()){
+            categorias.add(categoria.getCategoria());
+        }
+        selCategoria.setModel(new DefaultComboBoxModel(categorias.toArray()));
+        
+        for(Area area : areaDao.buscarTodos()){
+            areas.add(area.getArea());
+        }
+        selArea.setModel(new DefaultComboBoxModel(areas.toArray()));
+        
+        for(Genero genero : generoDao.buscarTodos()){
+            generos.add(genero.getGenero());
+        }
+        selGenero.setModel(new DefaultComboBoxModel(generos.toArray()));
+        
+        DateFormat format = new SimpleDateFormat("dd-MMMM-yyyy");
+        DateFormatter df = new DateFormatter(format);
+        txtFechaPublicacion = new JFormattedTextField(df);
+        
     }
 
     /**
@@ -46,6 +85,25 @@ public class ElementRegister extends javax.swing.JFrame {
         lblNombreUsuario = new javax.swing.JLabel();
         lblSalir = new javax.swing.JLabel();
         btnVolver1 = new javax.swing.JButton();
+        lblCategoria = new javax.swing.JLabel();
+        selCategoria = new javax.swing.JComboBox();
+        lblArea = new javax.swing.JLabel();
+        selArea = new javax.swing.JComboBox();
+        lblGenero = new javax.swing.JLabel();
+        selGenero = new javax.swing.JComboBox();
+        lblNombres = new javax.swing.JLabel();
+        txtNombres = new javax.swing.JTextField();
+        lblAutor = new javax.swing.JLabel();
+        txtAutor = new javax.swing.JTextField();
+        lblEditorial = new javax.swing.JLabel();
+        txtEditorial = new javax.swing.JTextField();
+        lblAutor1 = new javax.swing.JLabel();
+        txtFechaPublicacion = new javax.swing.JTextField();
+        lblObservaciones = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtObservaciones = new javax.swing.JTextArea();
+        btnCancelar = new javax.swing.JButton();
+        btnGuardar1 = new javax.swing.JButton();
 
         btnVolver.setText("Volver");
 
@@ -73,14 +131,86 @@ public class ElementRegister extends javax.swing.JFrame {
             }
         });
 
+        lblCategoria.setText("Categoria");
+
+        selCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lblArea.setText("Area");
+
+        selArea.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lblGenero.setText("Genero");
+
+        selGenero.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lblNombres.setText("Nombres");
+
+        lblAutor.setText("Autor");
+
+        lblEditorial.setText("Editorial");
+
+        lblAutor1.setText("Fecha Publicacion");
+
+        lblObservaciones.setText("Observaciones");
+
+        txtObservaciones.setColumns(20);
+        txtObservaciones.setRows(5);
+        jScrollPane1.setViewportView(txtObservaciones);
+
+        btnCancelar.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        btnCancelar.setText("Cancelar");
+
+        btnGuardar1.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        btnGuardar1.setText("Guardar");
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(jLabel1)
-                .addContainerGap(476, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblObservaciones)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblCategoria)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(selCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblArea)
+                        .addGap(18, 18, 18)
+                        .addComponent(selArea, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblGenero)
+                        .addGap(18, 18, 18)
+                        .addComponent(selGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblEditorial)
+                                .addGap(23, 23, 23)
+                                .addComponent(txtEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblNombres)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblAutor)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblAutor1)
+                                .addGap(30, 30, 30)
+                                .addComponent(txtFechaPublicacion))))
+                    .addComponent(jScrollPane1))
+                .addContainerGap(95, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,7 +221,12 @@ public class ElementRegister extends javax.swing.JFrame {
                         .addGap(14, 14, 14))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnVolver1)
-                        .addGap(32, 32, 32))))
+                        .addGap(32, 32, 32))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnGuardar1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(228, 228, 228))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,7 +237,35 @@ public class ElementRegister extends javax.swing.JFrame {
                     .addComponent(lblSalir))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 509, Short.MAX_VALUE)
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCategoria)
+                    .addComponent(selCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblArea)
+                    .addComponent(selArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblGenero)
+                    .addComponent(selGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNombres)
+                    .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAutor)
+                    .addComponent(txtAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEditorial)
+                    .addComponent(txtEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAutor1)
+                    .addComponent(txtFechaPublicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addComponent(lblObservaciones)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGuardar1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
                 .addComponent(btnVolver1)
                 .addContainerGap())
         );
@@ -122,6 +285,24 @@ public class ElementRegister extends javax.swing.JFrame {
             dispose();
         }
     }//GEN-LAST:event_btnVolver1ActionPerformed
+
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+        
+        // Asignacion de combos
+        Categoria categoria = categoriaDao.buscarPorCategoria((String)selCategoria.getSelectedItem());
+        Area area = areaDao.buscarPorArea((String)selArea.getSelectedItem());
+        Genero genero = generoDao.buscarPorGenero((String)selGenero.getSelectedItem());
+        
+        Elemento elemento  = new Elemento();
+        elemento.setTitulo(txtNombres.getText());
+        elemento.setAutor(txtAutor.getText());
+        elemento.setEditorial(txtEditorial.getText());
+        elemento.setObservaciones(txtObservaciones.getText());
+        elemento.setAreaId(area.getId());
+        elemento.setGeneroId(genero.getId());
+        elemento.setCategoriaId(categoria.getId());
+        
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,10 +349,29 @@ public class ElementRegister extends javax.swing.JFrame {
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardar1;
     private javax.swing.JButton btnVolver;
     private javax.swing.JButton btnVolver1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblArea;
+    private javax.swing.JLabel lblAutor;
+    private javax.swing.JLabel lblAutor1;
+    private javax.swing.JLabel lblCategoria;
+    private javax.swing.JLabel lblEditorial;
+    private javax.swing.JLabel lblGenero;
     private javax.swing.JLabel lblNombreUsuario;
+    private javax.swing.JLabel lblNombres;
+    private javax.swing.JLabel lblObservaciones;
     private javax.swing.JLabel lblSalir;
+    private javax.swing.JComboBox selArea;
+    private javax.swing.JComboBox selCategoria;
+    private javax.swing.JComboBox selGenero;
+    private javax.swing.JTextField txtAutor;
+    private javax.swing.JTextField txtEditorial;
+    private javax.swing.JTextField txtFechaPublicacion;
+    private javax.swing.JTextField txtNombres;
+    private javax.swing.JTextArea txtObservaciones;
     // End of variables declaration//GEN-END:variables
 }
