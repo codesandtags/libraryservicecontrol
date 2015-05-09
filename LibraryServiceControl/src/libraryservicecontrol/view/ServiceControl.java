@@ -65,6 +65,17 @@ public class ServiceControl extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsuario = new javax.swing.JTable();
         btnRegistrarUsuario = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblHistoricoPrestamos = new javax.swing.JTable();
+        lblCategoria = new javax.swing.JLabel();
+        selCategoria = new javax.swing.JComboBox();
+        lblCodigo = new javax.swing.JLabel();
+        txtCodigo = new javax.swing.JTextField();
+        lblNombre = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        btnConsultarDisponibilidad = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblUsuario1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,24 +142,67 @@ public class ServiceControl extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblUsuario);
 
         btnRegistrarUsuario.setText("Registrar Usuarios");
+        btnRegistrarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarUsuarioActionPerformed(evt);
+            }
+        });
+
+        tblHistoricoPrestamos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblHistoricoPrestamos);
+
+        lblCategoria.setText("Categoria");
+
+        selCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lblCodigo.setText("Código");
+
+        lblNombre.setText("Nombre");
+
+        btnConsultarDisponibilidad.setText("Consultar");
+
+        tblUsuario1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tblUsuario1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnVolver1)
-                        .addGap(34, 34, 34))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnConsultar)
                             .addComponent(lblNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(32, 32, 32)
                         .addComponent(lblSalir)
-                        .addGap(14, 14, 14))))
+                        .addGap(14, 14, 14))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3)
+                            .addComponent(btnVolver1))
+                        .addGap(34, 34, 34))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -162,6 +216,7 @@ public class ServiceControl extends javax.swing.JFrame {
                                 .addComponent(btnRegistrarUsuario)
                                 .addGap(278, 278, 278))
                             .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -173,9 +228,24 @@ public class ServiceControl extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(lblConsultar)
+                                    .addComponent(lblHistoricoPrestamos)
                                     .addComponent(lblDisponibilidad)
-                                    .addComponent(lblHistoricoPrestamos))
-                                .addGap(0, 178, Short.MAX_VALUE)))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblCategoria)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(selCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(31, 31, 31)
+                                        .addComponent(lblCodigo)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnConsultarDisponibilidad)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(lblNombre)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(0, 4, Short.MAX_VALUE)))))
                 .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
@@ -202,9 +272,23 @@ public class ServiceControl extends javax.swing.JFrame {
                 .addComponent(btnRegistrarUsuario)
                 .addGap(5, 5, 5)
                 .addComponent(lblHistoricoPrestamos)
-                .addGap(125, 125, 125)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblDisponibilidad)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCategoria)
+                    .addComponent(selCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCodigo)
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNombre)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnConsultarDisponibilidad)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(btnVolver1)
                 .addContainerGap())
         );
@@ -254,6 +338,17 @@ public class ServiceControl extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_selTipoDocumentoActionPerformed
 
+    private void btnRegistrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarUsuarioActionPerformed
+        UserRegister userRegister = null;
+        if(usuario != null){
+            userRegister = new UserRegister(usuario);
+        }else{
+            userRegister = new UserRegister();
+        }
+        userRegister.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnRegistrarUsuarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -300,19 +395,30 @@ public class ServiceControl extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultar;
+    private javax.swing.JButton btnConsultarDisponibilidad;
     private javax.swing.JButton btnRegistrarUsuario;
     private javax.swing.JButton btnVolver1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblCategoria;
+    private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblConsultar;
     private javax.swing.JLabel lblDisponibilidad;
     private javax.swing.JLabel lblHistoricoPrestamos;
+    private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblNombreUsuario;
     private javax.swing.JLabel lblSalir;
+    private javax.swing.JComboBox selCategoria;
     private javax.swing.JComboBox selTipoDocumento;
+    private javax.swing.JTable tblHistoricoPrestamos;
     private javax.swing.JTable tblUsuario;
+    private javax.swing.JTable tblUsuario1;
+    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDocumento;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
