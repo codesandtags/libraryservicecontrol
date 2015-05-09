@@ -1,10 +1,12 @@
 package libraryservicecontrol.database;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import libraryservicecontrol.model.Usuario;
@@ -16,13 +18,14 @@ public class UsuarioDAO extends ManejadorDAO<Usuario>{
 
         Boolean isCreado    = false;
         StringBuilder sql 	= new StringBuilder("INSERT INTO usuario ")
-        .append("(nombres,apellidos,usuario,clave,fecha_creado,tipo_documento,numero_documento,fecha_nacimiento,telefono,correo,direccion,ciudad,rol_id,) ")
+        .append("(nombres,apellidos,usuario,clave,fecha_creado,tipo_documento,numero_documento,fecha_nacimiento,telefono,correo,direccion,ciudad,rol_id) ")
         .append("VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
         Connection conexion	 = Conexion.getConexion();
         PreparedStatement consulta	 = null;
-        Integer insertados  = null;	
-
+        Integer insertados  = null;
+        Calendar fechaActual = Calendar.getInstance();
+        usuario.setFechaCreado(new Date(fechaActual.getTimeInMillis()));
         try {
             consulta 		= conexion.prepareStatement(sql.toString());
             consulta.setString(1, usuario.getNombres());

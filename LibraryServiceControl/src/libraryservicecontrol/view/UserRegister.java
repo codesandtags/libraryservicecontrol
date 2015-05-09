@@ -1,15 +1,21 @@
 package libraryservicecontrol.view;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import libraryservicecontrol.database.RolDAO;
+import libraryservicecontrol.database.UsuarioDAO;
 import libraryservicecontrol.model.Usuario;
 
 public class UserRegister extends javax.swing.JFrame {
 
     private Usuario usuario;
-    
+    private UsuarioDAO usuarioDao;
+    private RolDAO rolDao;
     /**
      * Creates new form Admin
      */
@@ -20,8 +26,10 @@ public class UserRegister extends javax.swing.JFrame {
     /**
      * Creates new form Admin
      */
-    public UserRegister(Usuario usuario) {
+    public UserRegister(Usuario usuario) {        
         initComponents();
+        usuarioDao = new UsuarioDAO();
+        rolDao = new RolDAO();
         this.usuario = usuario;
         lblNombreUsuario.setText(usuario.getNombreCompleto());
         if(usuario.getId() == 2){
@@ -37,7 +45,9 @@ public class UserRegister extends javax.swing.JFrame {
        selTipoDocumento.setModel(new DefaultComboBoxModel(tiposDocumento.toArray()));
        
        List<String> cargo = new ArrayList<String>();
-       cargo.add("Admin");
+       if(usuario.getRolId() == 1){
+           cargo.add("Admin");
+       }
        cargo.add("Asesor");
        cargo.add("Estudiante");
        selCargo.setModel(new DefaultComboBoxModel(cargo.toArray()));
@@ -318,7 +328,48 @@ public class UserRegister extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+         // Asignacion de combos
+        String tipoDocumento = (String)(selTipoDocumento.getSelectedItem());
+        String rol = (String)(selCargo.getSelectedItem());
+        
 
+        if(   txtNombre.getText().isEmpty() 
+            || txtApellidos.getText().isEmpty()            
+            || txtNumeroDocumento.getText().isEmpty()            
+           ){
+            JOptionPane.showMessageDialog(this, "Por favor diligencie todos los datos");
+            return ;
+        }
+        
+        Usuario usuario  = new Usuario();
+        usuario.setNumeroDocumento(txtNumeroDocumento.getText());     
+        usuario.setTipoDocumento(tipoDocumento);
+        usuario.setNombres(txtNombre.getText());
+        usuario.setApellidos(txtApellidos.getText());
+        //usuario.setFechaNacimiento(txtFecha.getText());
+        usuario.setCiudad(txtDepartamento.getText());
+        usuario.setTelefono(txtTel.getText());
+        usuario.setDireccion(txtDireccion.getText());
+        usuario.setCorreo(txtCorreo.getText());
+        usuario.setUsuario(txtUsuario.getText());
+        usuario.setClave(txtClave.getText());
+        usuario.setRolId(rolDao.buscarPorRol(rol).getId());
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaPublicacion = formatter.parse(txtFecha.getText());
+            usuario.setFechaNacimiento( new java.sql.Date(fechaPublicacion.getTime()));
+        }catch(ParseException e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Por favor ingrese una fecha valida");
+            return ;
+        }
+        
+        if(usuarioDao.crearUsuario(usuario)){
+            JOptionPane.showMessageDialog(this, "Usuario creado exitosamente!");
+            limpiarCampos();
+        }else{
+            JOptionPane.showMessageDialog(this, "Ocurrio un error creando el usuario!");
+        }
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
