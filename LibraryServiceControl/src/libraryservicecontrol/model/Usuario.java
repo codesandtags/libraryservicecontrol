@@ -102,5 +102,15 @@ public class Usuario {
 	public void setRolId(Integer rolId) {
 		this.rolId = rolId;
 	}
+        public String getNombreCompleto(){
+            String nombreCompleto = "";
+            if(this.nombres != null){
+                nombreCompleto += this.nombres;
+            }
+            if(this.apellidos != null){
+                nombreCompleto += this.apellidos;
+            }
+            return nombreCompleto;
+        }
 
 }

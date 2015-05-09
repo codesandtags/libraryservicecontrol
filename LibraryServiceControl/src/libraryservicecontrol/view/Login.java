@@ -5,6 +5,12 @@
  */
 package libraryservicecontrol.view;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+import javax.swing.JOptionPane;
+import libraryservicecontrol.database.UsuarioDAO;
+import libraryservicecontrol.model.Usuario;
+
 /**
  *
  * @author JuanGomez
@@ -60,6 +66,11 @@ public class Login extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jButton1.setText("Iniciar sesión");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,6 +124,39 @@ public class Login extends javax.swing.JFrame {
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        // Validacion del usuario
+        UsuarioDAO usuarioDao = new UsuarioDAO();
+        String txtUsuario = jTextField1.getText();
+        String txtClave   = jTextField2.getText();
+        Usuario usuario   = usuarioDao.validarUsuario(txtUsuario, txtClave);
+        
+        if(usuario != null){
+            
+            switch(usuario.getRolId()){
+                case 1 : 
+                    Admin admin = new Admin(usuario);
+                    admin.setVisible(true);
+                    dispose();
+                    break;
+                    
+                case 2:
+                    Adviser adviser = new Adviser(usuario);
+                    adviser.setVisible(true);
+                    dispose();
+                    break;
+                    
+                default:
+                    JOptionPane.showMessageDialog(this, "No cuenta con permisos suficientes para acceder a la aplicacion");
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(this, "Acceso Denegado : Usuario y/o Clave invalidos");
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

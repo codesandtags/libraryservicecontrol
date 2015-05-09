@@ -47,12 +47,12 @@ public class Conexion {
      */
     public static void cerrarConexion(Connection conexion){
     	try {
-			if(conexion != null && !conexion.isClosed()){
-				conexion.close();
-			}
-		} catch (SQLException e) {
-			Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, e);
-		}
+            if(conexion != null && !conexion.isClosed()){
+                conexion.close();
+            }
+        } catch (SQLException e) {
+                Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
     
     public static void main(String[] args) {
