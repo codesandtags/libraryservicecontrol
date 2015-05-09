@@ -29,7 +29,7 @@ public class ElementoDAO extends ManejadorDAO<Elemento>{
                 elemento.setAutor(resultado.getString("autor"));
                 elemento.setEditorial(resultado.getString("editorial"));
                 elemento.setFechaPublicacion(resultado.getDate("fecha_publicacion"));
-                elemento.setObservaciones(resultado.getString("titulo"));
+                elemento.setObservaciones(resultado.getString("observaciones"));
                 elemento.setCategoriaId(resultado.getInt("categoria_id"));
                 elemento.setAreaId(resultado.getInt("area_id"));
                 elemento.setGeneroId(resultado.getInt("genero_id"));
@@ -56,7 +56,7 @@ public class ElementoDAO extends ManejadorDAO<Elemento>{
                 elemento.setAutor(resultado.getString("autor"));
                 elemento.setEditorial(resultado.getString("editorial"));
                 elemento.setFechaPublicacion(resultado.getDate("fecha_publicacion"));
-                elemento.setObservaciones(resultado.getString("titulo"));
+                elemento.setObservaciones(resultado.getString("observaciones"));
                 elemento.setCategoriaId(resultado.getInt("categoria_id"));
                 elemento.setAreaId(resultado.getInt("area_id"));
                 elemento.setGeneroId(resultado.getInt("genero_id"));
@@ -152,10 +152,11 @@ public class ElementoDAO extends ManejadorDAO<Elemento>{
                 elemento.setAutor(resultado.getString("autor"));
                 elemento.setEditorial(resultado.getString("editorial"));
                 elemento.setFechaPublicacion(resultado.getDate("fecha_publicacion"));
-                elemento.setObservaciones(resultado.getString("titulo"));
+                elemento.setObservaciones(resultado.getString("observaciones"));
                 elemento.setCategoriaId(resultado.getInt("categoria_id"));
                 elemento.setAreaId(resultado.getInt("area_id"));
                 elemento.setGeneroId(resultado.getInt("genero_id"));
+                elemento.setAsignado(Boolean.FALSE);
                 elementos.add(elemento);
             }
             Conexion.cerrarConexion(conexion);

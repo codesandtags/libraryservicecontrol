@@ -1,17 +1,23 @@
 package libraryservicecontrol.view;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import libraryservicecontrol.database.CategoriaDAO;
 import libraryservicecontrol.database.ElementoDAO;
+import libraryservicecontrol.database.HistoricoPrestamoDAO;
 import libraryservicecontrol.database.UsuarioDAO;
 import libraryservicecontrol.model.Categoria;
 import libraryservicecontrol.model.Elemento;
 import libraryservicecontrol.model.HistoricoPrestamo;
 import libraryservicecontrol.model.Usuario;
 import libraryservicecontrol.model.VistaTablaElemento;
+import libraryservicecontrol.model.VistaTablaHistoricoPrestamo;
 import libraryservicecontrol.model.VistaTablaUsuario;
 
 public class ServiceControl extends javax.swing.JFrame {
@@ -23,6 +29,7 @@ public class ServiceControl extends javax.swing.JFrame {
     private UsuarioDAO usuarioDao;
     private ElementoDAO elementoDao;
     private CategoriaDAO categoriaDao;
+    private HistoricoPrestamoDAO historicoPrestamoDao;
     
     /**
      * Creates new form Admin
@@ -41,6 +48,7 @@ public class ServiceControl extends javax.swing.JFrame {
         usuarioDao = new UsuarioDAO();
         elementoDao = new ElementoDAO();
         categoriaDao = new CategoriaDAO();
+        historicoPrestamoDao = new HistoricoPrestamoDAO();
         btnRegistrarUsuario.setVisible(false);
         tblUsuario.setVisible(false);
         tblHistoricoPrestamos.setVisible(false);
@@ -95,6 +103,7 @@ public class ServiceControl extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblDisponibles = new javax.swing.JTable();
         lblHistoricoPrestamosNoResultados = new javax.swing.JLabel();
+        btnGuardarControlService = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -208,7 +217,14 @@ public class ServiceControl extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tblDisponibles);
 
-        lblHistoricoPrestamosNoResultados.setText("  ");
+        lblHistoricoPrestamosNoResultados.setText("El usuario no tiene prestamos asociados");
+
+        btnGuardarControlService.setText("Guardar");
+        btnGuardarControlService.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarControlServiceActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -261,7 +277,7 @@ public class ServiceControl extends javax.swing.JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(lblHistoricoPrestamos)
                                             .addGap(47, 47, 47)
-                                            .addComponent(lblHistoricoPrestamosNoResultados))
+                                            .addComponent(lblHistoricoPrestamosNoResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(lblCategoria)
                                             .addGap(18, 18, 18)
@@ -275,6 +291,10 @@ public class ServiceControl extends javax.swing.JFrame {
                                             .addGap(18, 18, 18)
                                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
                 .addGap(34, 34, 34))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnGuardarControlService, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(313, 313, 313))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,7 +341,9 @@ public class ServiceControl extends javax.swing.JFrame {
                         .addComponent(lblHistoricoPrestamosNoResultados)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGuardarControlService)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnVolver1)
                 .addContainerGap())
         );
@@ -366,6 +388,19 @@ public class ServiceControl extends javax.swing.JFrame {
             tblUsuario.setModel(vista);
             btnRegistrarUsuario.setVisible(false);
             tblUsuario.setVisible(true);
+            
+            // Historico de restamos
+            List<HistoricoPrestamo> historicos = historicoPrestamoDao.buscarPorUsuario(usuarioConsultado.getId());
+            if(historicos.size() > 0){
+                VistaTablaHistoricoPrestamo vistaHistorico = new VistaTablaHistoricoPrestamo(historicos);
+                tblHistoricoPrestamos.setModel(vistaHistorico);
+                tblHistoricoPrestamos.setVisible(true);
+                lblHistoricoPrestamosNoResultados.setVisible(false);
+            }else{
+                lblHistoricoPrestamosNoResultados.setVisible(true);
+                tblHistoricoPrestamos.setVisible(false);
+            }
+            
         }
         
     }//GEN-LAST:event_btnConsultarActionPerformed
@@ -398,12 +433,61 @@ public class ServiceControl extends javax.swing.JFrame {
             VistaTablaElemento vista = new VistaTablaElemento(elementosConsultados);
             tblDisponibles.setModel(vista);
             tblDisponibles.setVisible(true);
+            
+            tblDisponibles.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                Integer seleccionado = tblDisponibles.getSelectedRow();
+                if(seleccionado >= 0){
+                    System.out.println(" Seleccion => " + tblDisponibles.getSelectedRow());
+                    Boolean isAsignado = elementosConsultados.get(seleccionado).isAsignado();
+                    elementosConsultados.get(seleccionado).setAsignado(!isAsignado);
+                    VistaTablaElemento vista = new VistaTablaElemento(elementosConsultados);
+                    tblDisponibles.setModel(vista);
+                }
+            }
+            });
         }else{
             JOptionPane.showMessageDialog(this, "No se encontraron elementos disponibles");
             tblDisponibles.setVisible(false);
         }
         
     }//GEN-LAST:event_btnConsultarDisponibilidadActionPerformed
+
+    private void btnGuardarControlServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarControlServiceActionPerformed
+        
+        if(usuarioConsultado == null
+           || elementosConsultados == null
+           ){
+           JOptionPane.showMessageDialog(this, "Por favor consulte un usuario y asocie un Elemento");
+           return ;
+        }
+        
+        List<Elemento> elementosAsociados = new ArrayList<>();
+        for(Elemento elemento : elementosConsultados){
+            if(elemento.isAsignado()){
+                elementosAsociados.add(elemento);
+            }
+        }
+        
+        if(elementosAsociados.size() == 0){
+           JOptionPane.showMessageDialog(this, "Por favor asocie un elemento");
+           return ;
+        }
+        
+        Calendar fechaPrestamo = Calendar.getInstance();
+        HistoricoPrestamo historico = new HistoricoPrestamo();
+        historico.setUsuarioId(usuarioConsultado.getId());
+        historico.setElementoId(elementosAsociados.get(0).getId());
+        historico.setFechaPrestamo(new Date(fechaPrestamo.getTimeInMillis()));
+        historico.setEstado("PRESTADO");
+        
+        if(historicoPrestamoDao.crearHistorico(historico)){
+            JOptionPane.showMessageDialog(this, "Prestamo realizado exitosamente");
+        }else{
+            JOptionPane.showMessageDialog(this, "Ocurrio un error realizando el prestamo");
+        }
+        
+    }//GEN-LAST:event_btnGuardarControlServiceActionPerformed
 
     /**
      * @param args the command line arguments
@@ -452,6 +536,7 @@ public class ServiceControl extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnConsultarDisponibilidad;
+    private javax.swing.JButton btnGuardarControlService;
     private javax.swing.JButton btnRegistrarUsuario;
     private javax.swing.JButton btnVolver1;
     private javax.swing.JLabel jLabel1;

@@ -2,7 +2,6 @@ package libraryservicecontrol.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JCheckBox;
 import javax.swing.table.AbstractTableModel;
 
 public class VistaTablaElemento extends AbstractTableModel{
@@ -36,7 +35,7 @@ public class VistaTablaElemento extends AbstractTableModel{
                 value = elemento.getTitulo();
                 break;
             case 2:
-                value = new JCheckBox();
+                value = (elemento.isAsignado()) ? "ASOCIADO" : "NO ASOCIADO";
                 break;
             case 3:
                 value = elemento.getObservaciones();

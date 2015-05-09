@@ -102,6 +102,8 @@ FOREIGN KEY(area_id) REFERENCES area(id),
 FOREIGN KEY(genero_id) REFERENCES genero(id)
 );
 
+--INSERT INTO elemento(titulo, autor, editorial, fecha_publicacion, observaciones, categoria_id, area_id, genero_id) VALUES (?,?,?,?,?,?,?,?)
+
 -- -
 -- -  Historico de prestamos
 -- -
@@ -110,9 +112,10 @@ id 					INT 		NOT NULL	AUTO_INCREMENT,
 elemento_id			INT 		NOT NULL,
 usuario_id			INT 		NOT NULL,
 fecha_publicacion	DATE 		NOT NULL,
-fecha_devolucion	DATE 		NOT NULL,
+fecha_devolucion	DATE 		NULL,
 estado				VARCHAR(20)	NULL,
 PRIMARY KEY(id),
 FOREIGN KEY(elemento_id) REFERENCES elemento(id),
 FOREIGN KEY(usuario_id) REFERENCES usuario(id)
 );
+

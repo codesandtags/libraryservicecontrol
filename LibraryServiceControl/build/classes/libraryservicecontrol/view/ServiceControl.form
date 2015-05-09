@@ -79,7 +79,7 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="lblHistoricoPrestamos" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                                          <Component id="lblHistoricoPrestamosNoResultados" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblHistoricoPrestamosNoResultados" min="-2" pref="270" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="lblCategoria" min="-2" max="-2" attributes="0"/>
@@ -101,6 +101,11 @@
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Component id="btnGuardarControlService" min="-2" pref="137" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="313" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -155,7 +160,9 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane3" min="-2" pref="84" max="-2" attributes="0"/>
-              <EmptySpace pref="39" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btnGuardarControlService" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="btnVolver1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -453,8 +460,16 @@
     </Container>
     <Component class="javax.swing.JLabel" name="lblHistoricoPrestamosNoResultados">
       <Properties>
-        <Property name="text" type="java.lang.String" value="  "/>
+        <Property name="text" type="java.lang.String" value="El usuario no tiene prestamos asociados"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnGuardarControlService">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Guardar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGuardarControlServiceActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
